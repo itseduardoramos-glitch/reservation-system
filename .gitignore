@@ -1,0 +1,16 @@
+# Global
+node_modules/
+.env
+
+# Frontend build
+frontend/dist
+frontend/build
+
+# Backend
+backend/node_modules
+backend/.env
+
+# OS / editor
+.DS_Store
+.vscode/
+.idea/
