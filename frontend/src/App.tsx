@@ -8,7 +8,7 @@ import Login from './pages/Login'
  */
 const RootLayout = () => {
   return(
-    <div className="container border">
+    <div className="container d-flex justify-content-center align-items-center min-vh-100">
       <Outlet />
     </div>
   )

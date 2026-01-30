@@ -56,7 +56,7 @@ const postDate = async (req, res) => {
       io.emit("reservation:released", { date: oldDate });
       io.emit("reservation:created", { date });
 
-      return res.json({ ok: true });
+      return res.json({ ok: true, id: reservationId });
     }
 
     // Insert

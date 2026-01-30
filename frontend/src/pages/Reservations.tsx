@@ -22,9 +22,11 @@ function Reservations() {
     const [reservationConfirmed, sertReservationConfirmed] = useState<boolean>(false);
 
 
+    /**
+     * useEffect used to listen real-time changes in the database
+     */
     useEffect(() => {
         socket.on("reservation:created", ({ date }: { date: string }) => {
-            console.log("fecha bloqueada", date);
             setBlockedDates(prev => [...prev, toDate(date)]);
         });
 
@@ -56,7 +58,7 @@ function Reservations() {
                 Authorization: `Bearer ${token}`,
                 },
                 body: JSON.stringify({ id: reservationId }),
-                keepalive: true, // 👈 clave
+                keepalive: true,
             });
             }
         };
@@ -75,10 +77,12 @@ function Reservations() {
         setVisible(true);
         const timer = setTimeout(() => {
             setVisible(false);
+            setMessage('');
+            setMessageType('')
         }, 5000);
 
         return () => clearTimeout(timer);
-    }, [message]);
+    }, [message, messageType]);
 
     const toDate = (dateStr: string): Date => {
         const [y, m, d] = dateStr.split("-");
@@ -97,7 +101,8 @@ function Reservations() {
         const formatted = date.toISOString().split("T")[0];
 
         if (blockedDates.includes(date)) {
-            alert("Fecha no disponible");
+            setMessage("Fecha no disponible");
+            setMessageType("danger");
             return;
         }
 
@@ -139,13 +144,15 @@ function Reservations() {
     }
 
     return (
-        <div className="">
-            <form onSubmit={handleSubmit}>
-                <div className="form-group">
+        <div className="card shadow" style={{ width: "22rem" }}>
+            <div className="card-body">
+                <h5 className="card-title text-center mb-4">Reservaciones</h5>
+                <form onSubmit={handleSubmit} className="mb-3">
+                <div className="form-group mb-3">
                     <label htmlFor="serviceType">Tipo de servicio solicitado:</label>
                     <input type="text" className="form-control" name="serviceType" id="serviceType" />
                 </div>
-                <div className="form-group">
+                <div className="form-group mb-3">
                     <label htmlFor="date">Fecha:</label>
                     <div>
                         <DatePicker
@@ -160,7 +167,7 @@ function Reservations() {
                     />
                     </div>
                 </div>
-                <div className="form-group">
+                <div className="form-group mb-3">
                     <label htmlFor="phone">Celular:</label>
                     <input type="text" className="form-control" name="phone" id="phone" />
                 </div>
@@ -173,6 +180,8 @@ function Reservations() {
                     </div>
                 )
             }
+            </div>
+            
         </div>
     )
 }
